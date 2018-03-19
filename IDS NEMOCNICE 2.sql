@@ -67,7 +67,7 @@ CREATE TABLE LEK
 
 CREATE TABLE VYSETRENI
 (
-	id_vysetreni INTEGER PRIMARY KEY,
+	id_vysetreni INTEGER NOT NULL,
 	vysledek VARCHAR2(50) NOT NULL,
 	datum DATE NOT NULL   -- ex. 27.2.2018 : 12:23
 );
@@ -94,7 +94,7 @@ CREATE TABLE ma_uvazek
 (
     typ_uvazku      VARCHAR2(50) NOT NULL,   -- full-time , part-time
     pozice          VARCHAR2(50) NOT NULL,   -- neurolog, kardioolog....
-    telefonni_cislo INTEGER NOT NULL
+    telefonni_cislo VARCHAR2(50) NOT NULL
 );
 
 
@@ -114,9 +114,6 @@ ALTER TABLE LEK ADD PRIMARY KEY(id_lek);
 ALTER TABLE ODDELENI ADD CONSTRAINT FK_lekar_pracuje FOREIGN KEY(id_oddeleni) REFERENCES LEKAR(id_lekare);
 
 
-
-
-
             --- INSERTING DATA INTO TABLES ---
 
 INSERT INTO OSOBA (jmeno , prijmeni , datum_narozenin , adresa) VALUES('Michel','Reedman',TO_DATE('10/10/1965','MM/DD/YYYY'),'Leen Street');
@@ -128,11 +125,60 @@ INSERT INTO OSOBA (jmeno , prijmeni , datum_narozenin , adresa) VALUES('Jessica'
 INSERT INTO OSOBA (jmeno , prijmeni , datum_narozenin , adresa) VALUES('Michael','Keene',TO_DATE('09/29/1980','MM/DD/YYYY'),'Low Street');
 -- dorobit inserty....
 
-INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum)VALUES(1 , 'Nezdarilo sa' ,TO_DATE('1998-03-25 15:30','YYYY-MM-DD HH24:MI'));
+INSERT INTO LEKAR (id_lekare) VALUES(1);
+INSERT INTO LEKAR (id_lekare) VALUES(2); 
+INSERT INTO LEKAR (id_lekare) VALUES(3); 
+INSERT INTO LEKAR (id_lekare) VALUES(4);
+
+INSERT INTO SESTRA (id_sestry) VALUES(1);
+INSERT INTO SESTRA (id_sestry) VALUES(2); 
+INSERT INTO SESTRA (id_sestry) VALUES(3); 
+INSERT INTO SESTRA (id_sestry) VALUES(4);
+
+INSERT INTO PACIENT (rodne_cislo , telefoni_cislo) VALUES('148222','202-555-0183');
+INSERT INTO PACIENT (rodne_cislo , telefoni_cislo) VALUES('779988','202-555-0198'); 
+INSERT INTO PACIENT (rodne_cislo , telefoni_cislo) VALUES('423542','202-555-0174'); 
+INSERT INTO PACIENT (rodne_cislo , telefoni_cislo) VALUES('122547','202-555-0179');
+
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(1,'Cardiology','Rialto',100);
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(2,'Endocrinology','Rialto',75);
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(3,'Hematology','Rialto',50);
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(4,'Cardiology','Rialto',50);
+                   -- co kontretne ma byt umiestnenie ?? mesto ??  | kapacita oddelenie ? :D    
+INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(1,'Acebutolol','FORTE','STRONG','YES');
+INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(2,'Allernaze','MITTE','WEAK','YES');
+INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(3,'Arzerra','BIFORTE','MEDIUM','NO');
+INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(4,'Azithromycin','BIFORTE','MEDIUM','NO');                    
+
+INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni ) VALUES(1,TO_DATE('11/23/2018','MM-DD-YYYY'));
+INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni ) VALUES(2,TO_DATE('05/11/2018','MM-DD-YYYY'));
+INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni ) VALUES(3,TO_DATE('03/25/2018','MM-DD-YYYY'));
+INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni ) VALUES(4,TO_DATE('07/05/2018','MM-DD-YYYY'));
+
+INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum ) VALUES(1,'Great',TO_DATE('11/23/2018','MM-DD-YYYY'));
+INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum) VALUES(2,'Great',TO_DATE('05/11/2018','MM-DD-YYYY'));
+INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum) VALUES(3,'Bad',TO_DATE('03/25/2018','MM-DD-YYYY'));
+INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum) VALUES(4,'Bad',TO_DATE('07/05/2018','MM-DD-YYYY'));
+
+
+INSERT INTO ma_uvazek (typ_uvazku , pozice , telefonni_cislo) VALUES('full-time','Cardiologist','462-535-0183');
+INSERT INTO ma_uvazek (typ_uvazku , pozice , telefonni_cislo) VALUES('part-time','Endocrinologists','752-555-0223');
+INSERT INTO ma_uvazek (typ_uvazku , pozice , telefonni_cislo) VALUES('full-time','Gastroenterologists','902-155-2183');
+INSERT INTO ma_uvazek (typ_uvazku , pozice , telefonni_cislo) VALUES('part-time','Hematologists','721-545-0283');
+
+INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia) VALUES(TO_DATE('2018-11-14 11:22','YYYY-MM-DD HH24:MI'),4,'2 per day',TO_DATE('2018-11-23 11:22','YYYY-MM-DD HH24:MI'),TO_DATE('2018-11-23 11:22','YYYY-MM-DD HH24:MI'));
+INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia) VALUES(TO_DATE('2018-02-12 11:22','YYYY-MM-DD HH24:MI'),10,'4 per day',TO_DATE('2018-11-23 11:22','YYYY-MM-DD HH24:MI'),TO_DATE('2018-11-23 11:22','YYYY-MM-DD HH24:MI'));
+INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia) VALUES(TO_DATE('2018-04-28 11:22','YYYY-MM-DD HH24:MI'),2,'1 per day',TO_DATE('2018-11-23 11:22','YYYY-MM-DD HH24:MI'),TO_DATE('2018-11-23 11:22','YYYY-MM-DD HH24:MI'));
+INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia) VALUES(TO_DATE('2018-06-21 11:22','YYYY-MM-DD HH24:MI'),1,'1/2 per day',TO_DATE('2018-11-23 11:22','YYYY-MM-DD HH24:MI'),TO_DATE('2018-11-23 11:22','YYYY-MM-DD HH24:MI'));
+
+
+            --- END OF INSERTING --- 
+
+
 ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-YYYY';
-select * from OSOBA    -- spytaj sa ratka...s tymi nulami
+select * from OSOBA;    -- spytaj sa ratka...s tymi nulami
 ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-YYYY HH:MI:SS ';
-select * from VYSETRENI
+select * from VYSETRENI;
 
 /*
  skusanie
