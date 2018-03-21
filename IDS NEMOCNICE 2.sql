@@ -111,8 +111,8 @@ ALTER TABLE LEK ADD PRIMARY KEY(id_lek);
             --- CREATING FOREIGN KEYS ---
            
  -- ALTER TABLE zivocich  FOREIGN KEY (IDUmiestnenia) REFERENCES umiestnenie;          
-ALTER TABLE ODDELENI ADD CONSTRAINT FK_lekar_pracuje FOREIGN KEY(id_oddeleni) REFERENCES LEKAR(id_lekare);
 
+ALTER TABLE ODDELENI ADD CONSTRAINT FK_lekar_pracuje FOREIGN KEY(id_oddeleni) REFERENCES LEKAR(id_lekare);
 
             --- INSERTING DATA INTO TABLES ---
 
@@ -140,25 +140,26 @@ INSERT INTO PACIENT (rodne_cislo , telefoni_cislo) VALUES('779988','202-555-0198
 INSERT INTO PACIENT (rodne_cislo , telefoni_cislo) VALUES('423542','202-555-0174'); 
 INSERT INTO PACIENT (rodne_cislo , telefoni_cislo) VALUES('122547','202-555-0179');
 
-INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(1,'Cardiology','Rialto',100);
-INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(2,'Endocrinology','Rialto',75);
-INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(3,'Hematology','Rialto',50);
-INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(4,'Cardiology','Rialto',50);
-                   -- co kontretne ma byt umiestnenie ?? mesto ??  | kapacita oddelenie ? :D    
-INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(1,'Acebutolol','FORTE','STRONG','YES');
-INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(2,'Allernaze','MITTE','WEAK','YES');
-INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(3,'Arzerra','BIFORTE','MEDIUM','NO');
-INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(4,'Azithromycin','BIFORTE','MEDIUM','NO');                    
+-- kapacita bude pocet luzkov... cize cislo ako napriklad 100 = means 100 luzkov
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(1,'Cardiology','Pavilon B4',100);         
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(2,'Endocrinology','Pavilon A4',75);
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(3,'Hematology','Pavilon D1',50);
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita) VALUES(4,'Cardiology','Pavilon C3',50);
+
+INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(1,'Acebutolol','FORTE','STRONG','Persistently severe bradycardia');
+INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(2,'Allernaze','MITTE','WEAK','Pregnancy');
+INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(3,'Arzerra','BIFORTE','MEDIUM','Lactation schedules');
+INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(4,'Azithromycin','BIFORTE','MEDIUM','Hearing loss');                    
 
 INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni ) VALUES(1,TO_DATE('11/23/2018','MM-DD-YYYY'));
 INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni ) VALUES(2,TO_DATE('05/11/2018','MM-DD-YYYY'));
 INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni ) VALUES(3,TO_DATE('03/25/2018','MM-DD-YYYY'));
 INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni ) VALUES(4,TO_DATE('07/05/2018','MM-DD-YYYY'));
 
-INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum ) VALUES(1,'Great',TO_DATE('11/23/2018','MM-DD-YYYY'));
-INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum) VALUES(2,'Great',TO_DATE('05/11/2018','MM-DD-YYYY'));
-INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum) VALUES(3,'Bad',TO_DATE('03/25/2018','MM-DD-YYYY'));
-INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum) VALUES(4,'Bad',TO_DATE('07/05/2018','MM-DD-YYYY'));
+INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum ) VALUES(1,'healthy',TO_DATE('11/23/2018','MM-DD-YYYY'));
+INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum) VALUES(2,'cold',TO_DATE('05/11/2018','MM-DD-YYYY'));
+INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum) VALUES(3,'cancer',TO_DATE('03/25/2018','MM-DD-YYYY'));
+INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum) VALUES(4,'healthy',TO_DATE('07/05/2018','MM-DD-YYYY'));
 
 
 INSERT INTO ma_uvazek (typ_uvazku , pozice , telefonni_cislo) VALUES('full-time','Cardiologist','462-535-0183');
@@ -182,12 +183,6 @@ select * from VYSETRENI;
 
 /*
  skusanie
-CREATE TABLE vysetreni_pacient --pomocni table
-(
-	id_vys_pac INTEGER PRIMARY KEY,
-	jmeno VARCHAR(30) NOT NULL,
-	vysetreni VARCHAR(50) NOT NULL
-);
 ALTER TABLE vysetreni_pacient ADD(FOREIGN KEY(jmeno_pacientu) references PACIENT(jmeno));
 ALTER TABLE vysetreni_pacient ADD(FOREIGN KEY(vysledek_vysetreni) references PACIENT(vysledek));
 */
