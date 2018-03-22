@@ -21,7 +21,6 @@ DROP TABLE ma_uvazek CASCADE CONSTRAINTS;
 
     -- Vytvarannie tabuliek --
 
-
 CREATE TABLE LEKAR
 (
 	id_lekare INTEGER NOT NULL
@@ -30,29 +29,37 @@ CREATE TABLE LEKAR
 
 CREATE TABLE SESTRA
 (
-	id_sestry INTEGER NOT NULL
+	id_sestry INTEGER NOT NULL,
+    id_oddeleni INTEGER NOT NULL
 );
 
 CREATE TABLE PACIENT
 (
-	rodne_cislo INTEGER  NOT NULL,  --nebo jako PRIMARNI KLIC muzeme dat rodni cislo
-	telefoni_cislo VARCHAR2(30) NOT NULL
+    rodne_cislo INTEGER  NOT NULL,  --nebo jako PRIMARNI KLIC muzeme dat rodni cislo
+    telefoni_cislo VARCHAR2(30) NOT NULL,
+    id_lekare INTEGER NOT NULL
 );
 
 
 CREATE TABLE ODDELENI
 (
     id_oddeleni INTEGER NOT NULL,
-	nazev VARCHAR2(20) NOT NULL,
-	umisteni VARCHAR2(20) NOT NULL,
-	kapacita INTEGER DEFAULT 0  -- ak tam nic nezadame tak to bude 0
+    nazev VARCHAR2(20) NOT NULL,
+    umisteni VARCHAR2(20) NOT NULL,
+    kapacita INTEGER DEFAULT 0, -- ak tam nic nezadame tak to bude 0
+    id_lekare INTEGER NOT NULL,
+    id_vysetreni INTEGER NOT NULL,
+    id_hospitalizace INTEGER NOT NULL
 );
 
 
 CREATE TABLE HOSPITALIZACE
 (
-	id_hospitalizace INTEGER NOT NULL,
-	datum_zahajeni DATE NOT NULL
+    id_hospitalizace INTEGER NOT NULL,  
+    datum_zahajeni DATE NOT NULL,
+    rodne_cislo INTEGER NOT NUll,
+    id_oddeleni INTEGER NOT NULL,
+    id_lekare INTEGER NOT NULL
 );
 
 CREATE TABLE LEK
@@ -60,7 +67,7 @@ CREATE TABLE LEK
 	id_lek INTEGER NOT NULL,
 	nazev VARCHAR2(30) NOT NULL,
 	ucinna_latka VARCHAR2(30) NOT NULL, -- ked to budes insertovat tak 1.FORTE(silny) 2.BIFORTE 3.MITTE(slaby)
-	sila_leku VARCHAR2(20) NOT NULL, -- uprimne, nevim jaky typ tady ma byt
+	sila_leku VARCHAR2(20) NOT NULL, 
     kontranindikace VARCHAR2(20) NOT NULL
 );
 
@@ -69,7 +76,10 @@ CREATE TABLE VYSETRENI
 (
 	id_vysetreni INTEGER NOT NULL,
 	vysledek VARCHAR2(50) NOT NULL,
-	datum DATE NOT NULL   -- ex. 27.2.2018 : 12:23
+	datum DATE NOT NULL,   -- ex. 27.2.2018 : 12:23
+    id_lekare INTEGER NOT NULL,
+    id_oddeleni INTEGER NOT NULL,
+    id_hospitalizace INTEGER NOT NULL
 );
 
 CREATE TABLE OSOBA
@@ -87,14 +97,18 @@ CREATE TABLE byl_predepsan
     mnozstvi        INTEGER NOT NULL,       -- ratanie krabiciek...liekov
     davkovanie      VARCHAR2(50) NOT NULL,  -- toto neviem ci string alebo int ??
     datum_zahajenia TIMESTAMP NOT NULL,
-    datum_ukoncenia TIMESTAMP NOT NULL
+    datum_ukoncenia TIMESTAMP NOT NULL,
+    id_lek INTEGER NOT NULL,
+    id_hospitalizace INTEGER NOT NULL
 );
 
 CREATE TABLE ma_uvazek
 (
     typ_uvazku      VARCHAR2(50) NOT NULL,   -- full-time , part-time
     pozice          VARCHAR2(50) NOT NULL,   -- neurolog, kardioolog....
-    telefonni_cislo VARCHAR2(50) NOT NULL
+    telefonni_cislo VARCHAR2(50) NOT NULL,
+    id_oddeleni INTEGER NOT NULL,
+    id_lekare INTEGER NOT NULL
 );
 
 
@@ -108,11 +122,23 @@ ALTER TABLE HOSPITALIZACE ADD PRIMARY KEY(id_hospitalizace);
 ALTER TABLE VYSETRENI ADD PRIMARY KEY(id_vysetreni);
 ALTER TABLE LEK ADD PRIMARY KEY(id_lek);
 
-            --- CREATING FOREIGN KEYS ---
-           
- -- ALTER TABLE zivocich  FOREIGN KEY (IDUmiestnenia) REFERENCES umiestnenie;          
 
-ALTER TABLE ODDELENI ADD CONSTRAINT FK_lekar_pracuje FOREIGN KEY(id_oddeleni) REFERENCES LEKAR(id_lekare);
+            --- CREATING FOREIGN KEYS ---
+        
+ 
+ALTER TABLE HOSPITALIZACE ADD CONSTRAINT FK_pacient_hospitalizovan FOREIGN KEY(rodne_cislo) REFERENCES PACIENT(rodne_cislo);
+ALTER TABLE HOSPITALIZACE ADD CONSTRAINT FK_hospi_na_oddeleni FOREIGN KEY(id_oddeleni) REFERENCES ODDELENI(id_oddeleni);
+ALTER TABLE HOSPITALIZACE ADD CONSTRAINT FK_provedl_lekar FOREIGN KEY(id_lekare) REFERENCES LEKAR(id_lekare);
+ALTER TABLE SESTRA ADD CONSTRAINT FK_pracuje_na_oddeleni FOREIGN KEY(id_oddeleni) REFERENCES ODDELENI(id_oddeleni);
+ALTER TABLE PACIENT ADD CONSTRAINT FK_lekar_pacient FOREIGN KEY(id_lekare) REFERENCES LEKAR(id_lekare);
+ALTER TABLE VYSETRENI ADD CONSTRAINT FK_vyzaduje_hospi FOREIGN KEY(id_hospitalizace) REFERENCES HOSPITALIZACE(id_hospitalizace);
+ALTER TABLE VYSETRENI ADD CONSTRAINT FK_vyset_na_oddeleni FOREIGN KEY(id_oddeleni) REFERENCES ODDELENI(id_oddeleni);
+ALTER TABLE VYSETRENI ADD CONSTRAINT FK_provedl FOREIGN KEY(id_lekare) REFERENCES LEKAR(id_lekare);
+ALTER TABLE ma_uvazek ADD CONSTRAINT FK_lekar_pracuje_na FOREIGN KEY(id_oddeleni) REFERENCES ODDELENI(id_oddeleni);
+ALTER TABLE ma_uvazek ADD CONSTRAINT FK_oddeleni_lekar FOREIGN KEY(id_lekare) REFERENCES LEKAR(id_lekare);
+ALTER TABLE byl_predepsan ADD CONSTRAINT FK_pri_hospitalizace FOREIGN KEY(id_hospitalizace) REFERENCES HOSPITALIZACE(id_hospitalizace);
+ALTER TABLE byl_predepsan ADD CONSTRAINT FK_lek FOREIGN KEY(id_lek) REFERENCES LEK(id_lek);
+
 
             --- INSERTING DATA INTO TABLES ---
 
