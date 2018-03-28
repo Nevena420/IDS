@@ -69,6 +69,8 @@ CREATE TABLE HOSPITALIZACE
     id_oddeleni INTEGER NOT NULL,
     id_lekare INTEGER NOT NULL
 );
+ALTER TABLE HOSPITALIZACE ADD CONSTRAINT kontrola_rodne_cislo_hospitalizace CHECK ( rodne_cislo>99999999 AND (rodne_cislo<1000000000 OR (MOD(rodne_cislo, 11)=0 AND rodne_cislo<10000000000)) );
+
 
 CREATE TABLE LEK
 (
