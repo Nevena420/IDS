@@ -214,6 +214,10 @@ INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia
 INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,2,'1 per day',TO_DATE('2018-03-14','YYYY-MM-DD'),TO_DATE('2018-03-24','YYYY-MM-DD'), 4, 3);
 INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,1,'1/2 per day',TO_DATE('2018-11-03','YYYY-MM-DD'),TO_DATE('2018-11-23','YYYY-MM-DD'), 2, 4);
 
+INSERT INTO provedl_lekar_vysetreni (id_lekare , id_vysetreni ) VALUES(2, 3);
+INSERT INTO provedl_lekar_vysetreni (id_lekare , id_vysetreni ) VALUES(1, 4);
+INSERT INTO provedl_lekar_vysetreni (id_lekare , id_vysetreni ) VALUES(4, 2);
+INSERT INTO provedl_lekar_vysetreni (id_lekare , id_vysetreni ) VALUES(2, 1);
 
             --- END OF INSERTING --- 
 
