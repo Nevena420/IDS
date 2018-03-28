@@ -31,13 +31,13 @@ CREATE TABLE OSOBA
 
 CREATE TABLE LEKAR
 (
-	id_lekare INTEGER NOT NULL
+    id_lekare INTEGER NOT NULL
 );
 
 
 CREATE TABLE SESTRA
 (
-	id_sestry INTEGER NOT NULL,
+    id_sestry INTEGER NOT NULL,
     id_oddeleni INTEGER NOT NULL
 );
 
@@ -74,19 +74,19 @@ ALTER TABLE HOSPITALIZACE ADD CONSTRAINT kontrola_rodne_cislo_hospitalizace CHEC
 
 CREATE TABLE LEK
 (
-	id_lek INTEGER NOT NULL,
-	nazev VARCHAR2(30) NOT NULL,
-	ucinna_latka VARCHAR2(30) NOT NULL CHECK (ucinna_latka IN('FORTE','BIFORTE' ,'MITTE')),
-	sila_leku VARCHAR2(20) NOT NULL CHECK (sila_leku IN('STRONG','MEDIUM' ,'WEAK')), 
+    id_lek INTEGER NOT NULL,
+    nazev VARCHAR2(30) NOT NULL,
+    ucinna_latka VARCHAR2(30) NOT NULL CHECK (ucinna_latka IN('FORTE','BIFORTE' ,'MITTE')),
+    sila_leku VARCHAR2(20) NOT NULL CHECK (sila_leku IN('STRONG','MEDIUM' ,'WEAK')), 
     kontranindikace VARCHAR2(40) NOT NULL
 );
 
 
 CREATE TABLE VYSETRENI
 (
-	id_vysetreni INTEGER NOT NULL,
-	vysledek VARCHAR2(50) NOT NULL,
-	datum DATE NOT NULL,   -- ex. 27.2.2018 : 12:23
+    id_vysetreni INTEGER NOT NULL, 
+    vysledek VARCHAR2(50) NOT NULL, 
+    datum DATE NOT NULL,   
     id_lekare INTEGER NOT NULL,
     id_oddeleni INTEGER NOT NULL,
     id_hospitalizace INTEGER NOT NULL
