@@ -75,7 +75,7 @@ CREATE TABLE LEK
 	id_lek INTEGER NOT NULL,
 	nazev VARCHAR2(30) NOT NULL,
 	ucinna_latka VARCHAR2(30) NOT NULL CHECK (ucinna_latka IN('FORTE','BIFORTE' ,'MITTE')),
-	sila_leku VARCHAR2(20) NOT NULL, 
+	sila_leku VARCHAR2(20) NOT NULL CHECK (sila_leku IN('STRONG','MEDIUM' ,'WEAK')), 
     kontranindikace VARCHAR2(40) NOT NULL
 );
 
