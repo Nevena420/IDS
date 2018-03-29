@@ -1,8 +1,8 @@
---DLS projekt
---Vesovic Nevena
+-- BRRIEF : IDS project
+-- AUTHORS: Vesovic Nevena and Maros Orsak
 --
 
--- normalne entity
+-- normal entities
 
 DROP TABLE LEKAR CASCADE CONSTRAINTS;
 DROP TABLE SESTRA CASCADE CONSTRAINTS;
@@ -13,14 +13,16 @@ DROP TABLE LEK CASCADE CONSTRAINTS;
 DROP TABLE VYSETRENI CASCADE CONSTRAINTS;
 DROP TABLE OSOBA CASCADE CONSTRAINTS;
 
--- vztahove entity
+-- relationship entities
+
 DROP TABLE byl_predepsan CASCADE CONSTRAINTS;
 DROP TABLE ma_uvazek CASCADE CONSTRAINTS;
 DROP TABLE provedl_lekar_vysetreni CASCADE CONSTRAINTS;
 
+    -- creating tables --
 
-    -- Vytvarannie tabuliek --
 CREATE TABLE OSOBA
+
 ( 
     jmeno           VARCHAR2(50) NOT NULL,
     prijmeni        VARCHAR2(50) NOT NULL,
@@ -28,12 +30,10 @@ CREATE TABLE OSOBA
     adresa          VARCHAR2(50) NOT NULL
 );
 
-
 CREATE TABLE LEKAR
 (
     id_lekare INTEGER NOT NULL
 );
-
 
 CREATE TABLE SESTRA
 (
@@ -119,8 +119,8 @@ CREATE TABLE provedl_lekar_vysetreni
     id_vysetreni NUMBER NOT NULL
 );
 
-
             --- CREATING PRIMARY KEYS --
+            
 ALTER TABLE provedl_lekar_vysetreni ADD CONSTRAINT PK_provedl PRIMARY KEY (id_lekare, id_vysetreni);
 ALTER TABLE ma_uvazek ADD CONSTRAINT PK_uvazek PRIMARY KEY(id_lekare, id_oddeleni);
 ALTER TABLE byl_predepsan ADD CONSTRAINT PK_byl_predepsan PRIMARY KEY(id_hospitalizace, id_lek);
@@ -131,8 +131,6 @@ ALTER TABLE ODDELENI ADD PRIMARY KEY(id_oddeleni);
 ALTER TABLE HOSPITALIZACE ADD PRIMARY KEY(id_hospitalizace);
 ALTER TABLE VYSETRENI ADD PRIMARY KEY(id_vysetreni);
 ALTER TABLE LEK ADD PRIMARY KEY(id_lek);
-
-
 
             --- CREATING FOREIGN KEYS ---
 
@@ -165,7 +163,6 @@ INSERT INTO OSOBA (jmeno , prijmeni , datum_narozenin , adresa) VALUES('Jessica'
 INSERT INTO OSOBA (jmeno , prijmeni , datum_narozenin , adresa) VALUES('Michael','Keene',TO_DATE('09/29/1980','MM/DD/YYYY'),'Low Street');
 
 
-
 INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekare,id_vysetreni,id_hospitalizace) VALUES(1,'Cardiology','Pavilon B4',100,1,1,1);         
 INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekare,id_vysetreni,id_hospitalizace) VALUES(2,'Endocrinology','Pavilon A4',75,2,2,2);
 INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekare,id_vysetreni,id_hospitalizace) VALUES(3,'Hematology','Pavilon D1',50,3,3,3);
@@ -190,8 +187,6 @@ INSERT INTO SESTRA (id_sestry, id_oddeleni) VALUES(1,3);
 INSERT INTO SESTRA (id_sestry, id_oddeleni) VALUES(4,2); 
 INSERT INTO SESTRA (id_sestry, id_oddeleni) VALUES(3,2); 
 INSERT INTO SESTRA (id_sestry, id_oddeleni) VALUES(2,3);
-
-
 
 INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(1,'Acebutolol','FORTE','STRONG','Persistently severe bradycardia');
 INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(2,'Allernaze','MITTE','WEAK','Pregnancy');
