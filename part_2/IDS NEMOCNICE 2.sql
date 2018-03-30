@@ -183,10 +183,10 @@ INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(2,2);
 INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(3,3); 
 INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(4,4);
 
-INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(1,'Cardiology','Pavilon B4',100,1,1,1);         
-INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(2,'Endocrinology','Pavilon A4',75,2,2,2);
-INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(3,'Hematology','Pavilon D1',50,3,3,3);
-INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(4,'Cardiology','Pavilon C3',50,4,4,4);
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(1,'Cardiology','Pavilon B4',100,1,3,4);         
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(2,'Endocrinology','Pavilon A4',75,4,3,2);
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(3,'Hematology','Pavilon D1',50,4,2,3);
+INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(4,'Cardiology','Pavilon C3',50,4,1,2);
 
 INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(1,4,9);
 INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(2,2,10); 
