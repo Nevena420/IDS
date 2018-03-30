@@ -1,6 +1,7 @@
--- BRRIEF : IDS project
--- AUTHORS: Vesovic Nevena & Maros Orsak
-
+-- BRRIEF    : IDS project
+-- AUTHORS   : Vesovic Nevena & Maros Orsak
+-- DATE_START: 12.3.2018
+-- DATE_END  : 30.3.2018
                                                 --- Normal entities ---
 
 DROP TABLE OSOBA CASCADE CONSTRAINTS;
@@ -56,11 +57,13 @@ CREATE TABLE ODDELENI
     id_oddeleni INTEGER NOT NULL,
     nazev VARCHAR2(20) NOT NULL,
     umisteni VARCHAR2(20) NOT NULL,
-    kapacita INTEGER DEFAULT 0,
+    kapacita INTEGER NOT NULL,
     id_lekar INTEGER NOT NULL,
     id_vysetreni INTEGER NOT NULL,
     id_hospitalizace INTEGER NOT NULL
 );
+
+ALTER TABLE ODDELENI ADD CONSTRAINT kontrola_kapacita_oddeleni CHECK (kapacita > 0);
 
 
 CREATE TABLE HOSPITALIZACE
@@ -169,11 +172,11 @@ INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUE
 INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(5,'Samantha','Johnson',TO_DATE('09/29/1980','MM/DD/YYYY'),'Sixth Street');
 INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(6,'Jessica','Johns',TO_DATE('09/29/1980','MM/DD/YYYY'),'Sane Lane');
 INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(7,'Michael','Keene',TO_DATE('09/29/1980','MM/DD/YYYY'),'Low Street');
-INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(8,'Michael','Summer',TO_DATE('04/05/1965','MM/DD/YYYY'),'Burkes Street');
-INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(9,'Michael','Keene',TO_DATE('09/20/1980','MM/DD/YYYY'),'Prinston Street');
-INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(10,'Michael','Keene',TO_DATE('12/12/1912','MM/DD/YYYY'),'Cray Street');
-INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(11,'Michael','Keene',TO_DATE('01/01/1980','MM/DD/YYYY'),'Bay Street');
-INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(12,'Michael','Keene',TO_DATE('09/07/1970','MM/DD/YYYY'),'Lane Street');
+INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(8,'Brad','Summer',TO_DATE('04/05/1965','MM/DD/YYYY'),'Burkes Street');
+INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(9,'Martha','Gouuve',TO_DATE('09/20/1980','MM/DD/YYYY'),'Prinston Street');
+INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(10,'Amy','Flavour',TO_DATE('12/12/1912','MM/DD/YYYY'),'Cray Street');
+INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(11,'Lisa','Voubalis',TO_DATE('01/01/1980','MM/DD/YYYY'),'Bay Street');
+INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(12,'Samantha','Wicket',TO_DATE('09/07/1970','MM/DD/YYYY'),'Lane Street');
 
 INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(1,1);
 INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(2,2); 
