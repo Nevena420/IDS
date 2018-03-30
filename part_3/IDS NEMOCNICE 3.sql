@@ -244,7 +244,7 @@ SELECT * FROM ODDELENI WHERE EXISTS( SELECT * FROM SESTRA WHERE SESTRA.id_oddele
 
 
 --1. PRVA 
--- 2x s klauzulí GROUP BY a agregaèní funkcí
+-- 2x s klauzulÃ­ GROUP BY a agregaÃ¨nÃ­ funkcÃ­
 
 -- vypise pocet lekarov na danom oddeleni
 
@@ -268,3 +268,20 @@ SELECT * FROM ma_uvazek WHERE typ_uvazku='full-time';
 
 SELECT * FROM OSOBA WHERE id_osoba=(SELECT id_lekar FROM LEKAR WHERE id_lekar=(SELECT id_lekar FROM ma_uvazek WHERE telefonni_cislo= '462-535-0183')); 
 
+
+
+
+
+
+--Kteri lekar osetril ktereho pacienta.
+SELECT  PACIENT.rodne_cislo,
+        LEKAR.id_lekar
+FROM  PACIENT, LEKAR
+WHERE LEKAR.id_lekar = PACIENT.id_lekar;
+
+--Podrobnejsi info o lekarech kteri osetrili urcite pacienty.
+SELECT  PACIENT.rodne_cislo,
+        LEKAR.id_lekar,
+        OSOBA.*
+FROM  PACIENT, LEKAR , OSOBA
+WHERE LEKAR.id_lekar = PACIENT.id_lekar AND OSOBA.id_osoba = LEKAR.id_osoba;
