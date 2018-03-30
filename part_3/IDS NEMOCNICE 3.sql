@@ -285,3 +285,10 @@ SELECT  PACIENT.rodne_cislo,
         OSOBA.*
 FROM  PACIENT, LEKAR , OSOBA
 WHERE LEKAR.id_lekar = PACIENT.id_lekar AND OSOBA.id_osoba = LEKAR.id_osoba;
+
+--V kolik hodin byl pacient hospitalizovan. Vypise v poradi podle datumu.
+SELECT  PACIENT.rodne_cislo,
+        HOSPITALIZACE.datum_zahajeni
+FROM PACIENT, HOSPITALIZACE
+WHERE PACIENT.rodne_cislo = HOSPITALIZACE.rodne_cislo
+ORDER BY datum_zahajeni;
