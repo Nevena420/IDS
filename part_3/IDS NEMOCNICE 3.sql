@@ -185,6 +185,7 @@ INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,i
 INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(3,'Hematology','Pavilon D1',50,3,3,3);
 INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(4,'Cardiology','Pavilon C3',50,4,4,4);
 
+
 INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(1,4,9);
 INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(2,2,10); 
 INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(3,1,11); 
@@ -241,16 +242,13 @@ SELECT * FROM ODDELENI WHERE id_oddeleni=(SELECT id_oddeleni FROM SESTRA WHERE i
 
 SELECT * FROM ODDELENI WHERE EXISTS( SELECT * FROM SESTRA WHERE SESTRA.id_oddeleni = ODDELENI.id_oddeleni);
 
-/*
-1. PRVA 
+
+--1. PRVA 
 -- 2x s klauzulí GROUP BY a agregaèní funkcí
---vypise plat vsetkych lekarov na oddeleni
 
-SELECT id_oddeleni, SUM(plat) FROM Uvazok GROUP BY id_oddeleni;   
-        - TODO :            TAKTIEZ NIECO PODOBNE TREBA SPRAVIT iba toto jedno a vsetko uz je
+-- vypise pocet lekarov na danom oddeleni
 
-*/
-
+SELECT id_lekar, COUNT(id_lekar) FROM ODDELENI GROUP BY id_lekar;
 
 -- 2.DRUHA
 --vypise maximalnu nazov a kapacitu jednotlivych oddeleni 
