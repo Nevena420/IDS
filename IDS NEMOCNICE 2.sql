@@ -1,9 +1,9 @@
 -- BRRIEF : IDS project
--- AUTHORS: Vesovic Nevena and Maros Orsak
---
+-- AUTHORS: Vesovic Nevena & Maros Orsak
 
--- normal entities
+                                                --- Normal entities ---
 
+DROP TABLE OSOBA CASCADE CONSTRAINTS;
 DROP TABLE LEKAR CASCADE CONSTRAINTS;
 DROP TABLE SESTRA CASCADE CONSTRAINTS;
 DROP TABLE PACIENT CASCADE CONSTRAINTS;
@@ -11,15 +11,14 @@ DROP TABLE ODDELENI CASCADE CONSTRAINTS;
 DROP TABLE HOSPITALIZACE CASCADE CONSTRAINTS;
 DROP TABLE LEK CASCADE CONSTRAINTS;
 DROP TABLE VYSETRENI CASCADE CONSTRAINTS;
-DROP TABLE OSOBA CASCADE CONSTRAINTS;
 
--- relationship entities
+                                                --- Relationship entities ---
 
 DROP TABLE byl_predepsan CASCADE CONSTRAINTS;
 DROP TABLE ma_uvazek CASCADE CONSTRAINTS;
 DROP TABLE provedl_lekar_vysetreni CASCADE CONSTRAINTS;
 
-    -- creating tables --
+                                                --- CREATING TABLES ---
 
 CREATE TABLE OSOBA
 
@@ -122,11 +121,9 @@ CREATE TABLE provedl_lekar_vysetreni
     id_vysetreni NUMBER NOT NULL
 );
 
-            --- CREATING PRIMARY KEYS --
+
+                                        --- CREATING PRIMARY KEYS ---
             
-ALTER TABLE provedl_lekar_vysetreni ADD CONSTRAINT PK_provedl PRIMARY KEY (id_lekar, id_vysetreni);
-ALTER TABLE ma_uvazek ADD CONSTRAINT PK_uvazek PRIMARY KEY(id_lekar, id_oddeleni);
-ALTER TABLE byl_predepsan ADD CONSTRAINT PK_byl_predepsan PRIMARY KEY(id_hospitalizace, id_lek);
 ALTER TABLE OSOBA ADD PRIMARY KEY(id_osoba);
 ALTER TABLE LEKAR ADD PRIMARY KEY(id_lekar);
 ALTER TABLE SESTRA ADD PRIMARY KEY(id_sestra);
@@ -135,8 +132,13 @@ ALTER TABLE ODDELENI ADD PRIMARY KEY(id_oddeleni);
 ALTER TABLE HOSPITALIZACE ADD PRIMARY KEY(id_hospitalizace);
 ALTER TABLE VYSETRENI ADD PRIMARY KEY(id_vysetreni);
 ALTER TABLE LEK ADD PRIMARY KEY(id_lek);
+ALTER TABLE byl_predepsan ADD CONSTRAINT PK_byl_predepsan PRIMARY KEY(id_hospitalizace, id_lek);
+ALTER TABLE ma_uvazek ADD CONSTRAINT PK_uvazek PRIMARY KEY(id_lekar, id_oddeleni);
+ALTER TABLE provedl_lekar_vysetreni ADD CONSTRAINT PK_provedl PRIMARY KEY (id_lekar, id_vysetreni);
 
-            --- CREATING FOREIGN KEYS ---
+
+                                         --- CREATING FOREIGN KEYS ---
+                                         
 ALTER TABLE LEKAR ADD CONSTRAINT FK_lekar_info FOREIGN KEY(id_osoba) REFERENCES OSOBA(id_osoba);
 ALTER TABLE SESTRA ADD CONSTRAINT FK_sestra_info FOREIGN KEY(id_osoba) REFERENCES OSOBA(id_osoba);
 ALTER TABLE PACIENT ADD CONSTRAINT FK_pacient_info FOREIGN KEY(id_osoba) REFERENCES OSOBA(id_osoba);
@@ -148,17 +150,17 @@ ALTER TABLE PACIENT ADD CONSTRAINT FK_lekar_pacient FOREIGN KEY(id_lekar) REFERE
 ALTER TABLE VYSETRENI ADD CONSTRAINT FK_vyzaduje_hospi FOREIGN KEY(id_hospitalizace) REFERENCES HOSPITALIZACE(id_hospitalizace);
 ALTER TABLE VYSETRENI ADD CONSTRAINT FK_vyset_na_oddeleni FOREIGN KEY(id_oddeleni) REFERENCES ODDELENI(id_oddeleni);
 
-ALTER TABLE ma_uvazek ADD CONSTRAINT FK_lekar_pracuje_na FOREIGN KEY(id_oddeleni) REFERENCES ODDELENI(id_oddeleni);
-ALTER TABLE ma_uvazek ADD CONSTRAINT FK_oddeleni_lekar FOREIGN KEY(id_lekar) REFERENCES LEKAR(id_lekar);
-
 ALTER TABLE byl_predepsan ADD CONSTRAINT FK_pri_hospitalizace FOREIGN KEY(id_hospitalizace) REFERENCES HOSPITALIZACE(id_hospitalizace);
 ALTER TABLE byl_predepsan ADD CONSTRAINT FK_lek FOREIGN KEY(id_lek) REFERENCES LEK(id_lek);
+
+ALTER TABLE ma_uvazek ADD CONSTRAINT FK_lekar_pracuje_na FOREIGN KEY(id_oddeleni) REFERENCES ODDELENI(id_oddeleni);
+ALTER TABLE ma_uvazek ADD CONSTRAINT FK_oddeleni_lekar FOREIGN KEY(id_lekar) REFERENCES LEKAR(id_lekar);
 
 ALTER TABLE provedl_lekar_vysetreni ADD CONSTRAINT FK_provedl_lekar FOREIGN KEY(id_lekar) REFERENCES LEKAR(id_lekar);
 ALTER TABLE provedl_lekar_vysetreni ADD CONSTRAINT FK_provedl_vysetreni FOREIGN KEY(id_vysetreni) REFERENCES VYSETRENI(id_vysetreni);
 
 
-            --- INSERTING DATA INTO TABLES ---
+                                               --- INSERTING DATA INTO TABLES ---
 
 INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(1,'Michel','Reedman',TO_DATE('10/10/1965','MM/DD/YYYY'),'Leen Street');
 INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(2,'John','Smith',TO_DATE('03/10/1975','MM/DD/YYYY'),'Ride Street');
@@ -173,31 +175,31 @@ INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUE
 INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(11,'Michael','Keene',TO_DATE('01/01/1980','MM/DD/YYYY'),'Bay Street');
 INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(12,'Michael','Keene',TO_DATE('09/07/1970','MM/DD/YYYY'),'Lane Street');
 
+INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(1,1);
+INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(2,2); 
+INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(3,3); 
+INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(4,4);
 
 INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(1,'Cardiology','Pavilon B4',100,1,1,1);         
 INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(2,'Endocrinology','Pavilon A4',75,2,2,2);
 INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(3,'Hematology','Pavilon D1',50,3,3,3);
 INSERT INTO ODDELENI(id_oddeleni,nazev,umisteni,kapacita,id_lekar,id_vysetreni,id_hospitalizace) VALUES(4,'Cardiology','Pavilon C3',50,4,4,4);
 
-INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(1,1);
-INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(2,2); 
-INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(3,3); 
-INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(4,4);
+INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(1,4,9);
+INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(2,2,10); 
+INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(3,1,11); 
+INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(4,3,12);
 
 INSERT INTO PACIENT (rodne_cislo , telefoni_cislo, id_lekar , id_osoba) VALUES(9610219168,'202-555-0183',3,5);
 INSERT INTO PACIENT (rodne_cislo , telefoni_cislo, id_lekar , id_osoba) VALUES(9709241729,'202-555-0198',2,6); 
 INSERT INTO PACIENT (rodne_cislo , telefoni_cislo, id_lekar , id_osoba) VALUES(9755128790,'202-555-0174',1,7); 
 INSERT INTO PACIENT (rodne_cislo , telefoni_cislo, id_lekar , id_osoba) VALUES(9859040466,'202-555-0179',4,8);
 
+
 INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni, rodne_cislo, id_oddeleni, id_lekar  ) VALUES(1,TO_DATE('11/23/2018','MM-DD-YYYY'), 9859040466, 1, 1);
 INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni, rodne_cislo, id_oddeleni, id_lekar  ) VALUES(2,TO_DATE('05/11/2018','MM-DD-YYYY'), 9755128790, 4, 2);
 INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni, rodne_cislo, id_oddeleni, id_lekar  ) VALUES(3,TO_DATE('03/25/2018','MM-DD-YYYY'), 9859040466, 3, 3);
 INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni, rodne_cislo, id_oddeleni, id_lekar  ) VALUES(4,TO_DATE('07/05/2018','MM-DD-YYYY'), 9755128790, 2, 3);
-
-INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(1,4,9);
-INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(4,2,10); 
-INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(3,1,11); 
-INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(2,3,12);
 
 INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(1,'Acebutolol','FORTE','STRONG','Persistently severe bradycardia');
 INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(2,'Allernaze','MITTE','WEAK','Pregnancy');
@@ -209,23 +211,22 @@ INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum, id_hospitalizace , id_od
 INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum, id_hospitalizace , id_oddeleni , id_lekar ) VALUES(3,'cancer',TO_DATE('03/25/2018','MM-DD-YYYY'), 3, 1, 3);
 INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum, id_hospitalizace , id_oddeleni , id_lekar ) VALUES(4,'healthy',TO_DATE('07/05/2018','MM-DD-YYYY'), 1, 2, 1);
 
+INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,4,'2 per day',TO_DATE('2018-11-23','YYYY-MM-DD'),TO_DATE('2018-11-29','YYYY-MM-DD'), 1, 4);
+INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,10,'4 per day',TO_DATE('2018-12-23','YYYY-MM-DD'),TO_DATE('2019-01-23','YYYY-MM-DD'), 1, 1);
+INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,2,'1 per day',TO_DATE('2018-03-14','YYYY-MM-DD'),TO_DATE('2018-03-24','YYYY-MM-DD'), 4, 3);
+INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,1,'1/2 per day',TO_DATE('2018-11-03','YYYY-MM-DD'),TO_DATE('2018-11-23','YYYY-MM-DD'), 2, 4);
 
 INSERT INTO ma_uvazek (typ_uvazku , pozice , telefonni_cislo , id_oddeleni , id_lekar) VALUES('full-time','Cardiologist','462-535-0183', 2, 4);
 INSERT INTO ma_uvazek (typ_uvazku , pozice , telefonni_cislo , id_oddeleni , id_lekar) VALUES('part-time','Endocrinologists','752-555-0223', 1, 2);
 INSERT INTO ma_uvazek (typ_uvazku , pozice , telefonni_cislo , id_oddeleni , id_lekar) VALUES('full-time','Gastroenterologists','902-155-2183', 4, 1);
 INSERT INTO ma_uvazek (typ_uvazku , pozice , telefonni_cislo , id_oddeleni , id_lekar) VALUES('part-time','Hematologists','721-545-0283', 4, 2);
 
-INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,4,'2 per day',TO_DATE('2018-11-23','YYYY-MM-DD'),TO_DATE('2018-11-29','YYYY-MM-DD'), 1, 4);
-INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,10,'4 per day',TO_DATE('2018-12-23','YYYY-MM-DD'),TO_DATE('2019-01-23','YYYY-MM-DD'), 1, 1);
-INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,2,'1 per day',TO_DATE('2018-03-14','YYYY-MM-DD'),TO_DATE('2018-03-24','YYYY-MM-DD'), 4, 3);
-INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,1,'1/2 per day',TO_DATE('2018-11-03','YYYY-MM-DD'),TO_DATE('2018-11-23','YYYY-MM-DD'), 2, 4);
-
 INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(2, 3);
 INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(1, 4);
 INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(4, 2);
 INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(2, 1);
 
-            --- END OF INSERTING --- 
+                                                                  --- END OF INSERTING --- 
 
 
 
