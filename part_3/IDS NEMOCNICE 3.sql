@@ -292,3 +292,15 @@ SELECT  PACIENT.rodne_cislo,
 FROM PACIENT, HOSPITALIZACE
 WHERE PACIENT.rodne_cislo = HOSPITALIZACE.rodne_cislo
 ORDER BY datum_zahajeni;
+
+--Dostavame podrobnejsi info o sestre ktera pracuje na oddeleni 'Hematology'(IN s vnorenim selektem)
+SELECT * FROM OSOBA 
+    WHERE id_osoba IN
+    (SELECT id_osoba FROM SESTRA
+    WHERE id_oddeleni IN
+    (SELECT id_oddeleni FROM ODDELENI WHERE nazev = 'Hematology'));
+    
+--Vypise nazev leku ci mnozstvi bylo predepsano na 10 tablety pri hospitalizace.(SELECT s prediktem EXISTS) ----?? Nevim jestli jsem tohle napsala spravne v cestine ale zda se mi ze ne :D)
+SELECT nazev FROM LEK
+WHERE EXISTS (SELECT id_lek FROM byl_predepsan WHERE id_lek = LEK.id_lek AND mnozstvi = 10);
+
