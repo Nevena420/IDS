@@ -273,25 +273,35 @@ SELECT * FROM OSOBA WHERE id_osoba=(SELECT id_lekar FROM LEKAR WHERE id_lekar=(S
 
 
 
---Kteri lekar osetril ktereho pacienta.
+--Kteri lekar osetril ktereho pacienta.(Spojeni 2x tabulky)
 SELECT  PACIENT.rodne_cislo,
         LEKAR.id_lekar
 FROM  PACIENT, LEKAR
 WHERE LEKAR.id_lekar = PACIENT.id_lekar;
 
---Podrobnejsi info o lekarech kteri osetrili urcite pacienty.
+--V kolik hodin byl pacient hospitalizovan. Vypise v poradi podle datumu.(Spojeni 2x tabulky)
+SELECT  PACIENT.rodne_cislo,
+        HOSPITALIZACE.datum_zahajeni
+FROM PACIENT, HOSPITALIZACE
+WHERE PACIENT.rodne_cislo = HOSPITALIZACE.rodne_cislo
+ORDER BY datum_zahajeni;
+
+--Podrobnejsi info o lekarech kteri osetrili urcite pacienty.(Spojeni 3x tabulky)
 SELECT  PACIENT.rodne_cislo,
         LEKAR.id_lekar,
         OSOBA.*
 FROM  PACIENT, LEKAR , OSOBA
 WHERE LEKAR.id_lekar = PACIENT.id_lekar AND OSOBA.id_osoba = LEKAR.id_osoba;
 
---V kolik hodin byl pacient hospitalizovan. Vypise v poradi podle datumu.
-SELECT  PACIENT.rodne_cislo,
-        HOSPITALIZACE.datum_zahajeni
-FROM PACIENT, HOSPITALIZACE
-WHERE PACIENT.rodne_cislo = HOSPITALIZACE.rodne_cislo
-ORDER BY datum_zahajeni;
+--Kolik lekare je na kterem oddeleni(1. GROUP BY a agregační funkcí)
+SELECT nazev,COUNT(id_lekar) AS "Pocet lekare"
+FROM ODDELENI
+GROUP BY nazev;
+
+--Jak moc tablety bylo predepsano od jednotlivych leku.(2. GROUP BY a agregační funkcí) 
+SELECT id_lek, SUM(mnozstvi) AS "Mnozstvi predepsaneho leku"
+FROM byl_predepsan
+GROUP BY id_lek;
 
 --Dostavame podrobnejsi info o sestre ktera pracuje na oddeleni 'Hematology'(IN s vnorenim selektem)
 SELECT * FROM OSOBA 
@@ -303,4 +313,5 @@ SELECT * FROM OSOBA
 --Vypise nazev leku ci mnozstvi bylo predepsano na 10 tablety pri hospitalizace.(SELECT s prediktem EXISTS) ----?? Nevim jestli jsem tohle napsala spravne v cestine ale zda se mi ze ne :D)
 SELECT nazev FROM LEK
 WHERE EXISTS (SELECT id_lek FROM byl_predepsan WHERE id_lek = LEK.id_lek AND mnozstvi = 10);
+
 
