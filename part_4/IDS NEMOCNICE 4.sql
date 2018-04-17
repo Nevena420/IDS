@@ -1,7 +1,7 @@
 -- BRRIEF    : IDS project
 -- AUTHORS   : Vesovic Nevena & Maros Orsak
--- DATE_START: 12.3.2018
--- DATE_END  : 30.3.2018
+-- DATE_START: 17.4.2018
+-- DATE_END  : **.*.2018
                                                 --- Normal entities ---
 
 DROP TABLE OSOBA CASCADE CONSTRAINTS;
