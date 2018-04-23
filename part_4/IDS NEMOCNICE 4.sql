@@ -349,8 +349,31 @@ INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(1, 4);
 INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(4, 2);
 INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(2, 1); 
 
+CREATE OR REPLACE PROCEDURE vyhledej_pacienta (jmeno LEK.nazev%TYPE)
+IS
+    
+    CURSOR akce
+    IS
+        SELECT rodne_cislo,jmeno,nazev FROM 
+        PACIENT NATURAL JOIN HOSPITALIZACE NATURAL JOIN byl_predepsan NATURAL JOIN OSOBA NATURAL JOIN LEK;
+
+BEGIN
+    SELECT nazev INTO jmeno FROM LEK WHERE jmeno == nazev;  -- chceme vypisat jeden konkretny nazev leku ktory sme dostali ako parameter
+    IF(jmeno == NULL) THEN 
+        DBMS_OUTPUT.put_line('Error: The concrete medicine does not exist in database');
+
+END vyhledej_pacienta;
+
+
+
+
+
+
+
+
                                                                   --- SELECT QUERIES ---
-                                                                                                         
+                                                                  
+                                                                
 -- 2x  spojenie dvoch tabuliek
 --vypise Sestricku ktorej prijmeni je Flavour ----> cize ID_SESTRA = 2 && ID_ODDELENI = 2 && ID_OSOBA = 10
 
