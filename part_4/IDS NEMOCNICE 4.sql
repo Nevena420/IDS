@@ -316,10 +316,13 @@ INSERT INTO PACIENT (rodne_cislo , telefoni_cislo, id_lekar , id_osoba) VALUES('
 INSERT INTO PACIENT (rodne_cislo , telefoni_cislo, id_lekar , id_osoba) VALUES('915115/9701','202-555-0174',1,7); 
 INSERT INTO PACIENT (rodne_cislo , telefoni_cislo, id_lekar , id_osoba) VALUES('955215/9701','202-555-0179',4,8);
 
-INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni, rodne_cislo, id_oddeleni, id_lekar  ) VALUES(1,TO_DATE('11/23/2018','MM-DD-YYYY'), '955615/9701', 1, 1);
-INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni, rodne_cislo, id_oddeleni, id_lekar  ) VALUES(2,TO_DATE('05/11/2018','MM-DD-YYYY'), '955215/9701', 4, 2);
+INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni, rodne_cislo, id_oddeleni, id_lekar  ) VALUES(1,TO_DATE('11/23/2018','MM-DD-YYYY'), '970110/4270', 1, 1);
+INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni, rodne_cislo, id_oddeleni, id_lekar  ) VALUES(2,TO_DATE('05/11/2018','MM-DD-YYYY'), '955615/9701', 4, 2);
 INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni, rodne_cislo, id_oddeleni, id_lekar  ) VALUES(3,TO_DATE('03/25/2018','MM-DD-YYYY'), '970110/4270', 3, 3);
 INSERT INTO HOSPITALIZACE (id_hospitalizace , datum_zahajeni, rodne_cislo, id_oddeleni, id_lekar  ) VALUES(4,TO_DATE('07/05/2018','MM-DD-YYYY'), '955215/9701', 2, 3);
+
+
+
 
 INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(1,'Acebutolol','FORTE','STRONG','Persistently severe bradycardia');
 INSERT INTO LEK (id_lek , nazev , ucinna_latka, sila_leku, kontranindikace) VALUES(2,'Allernaze','MITTE','WEAK','Pregnancy');
@@ -332,8 +335,8 @@ INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum, id_hospitalizace , id_od
 INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum, id_hospitalizace , id_oddeleni , id_lekar ) VALUES(4,'healthy',TO_DATE('07/05/2018','MM-DD-YYYY'), 1, 2, 1);
 
 INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,4,'2 per day',TO_DATE('2018-11-23','YYYY-MM-DD'),TO_DATE('2018-11-29','YYYY-MM-DD'), 1, 4);
-INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,10,'4 per day',TO_DATE('2018-12-23','YYYY-MM-DD'),TO_DATE('2019-01-23','YYYY-MM-DD'), 1, 1);
-INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,2,'1 per day',TO_DATE('2018-03-14','YYYY-MM-DD'),TO_DATE('2018-03-24','YYYY-MM-DD'), 4, 3);
+INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,10,'4 per day',TO_DATE('2018-12-23','YYYY-MM-DD'),TO_DATE('2019-01-23','YYYY-MM-DD'),4, 1);
+INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,2,'1 per day',TO_DATE('2018-03-14','YYYY-MM-DD'),TO_DATE('2018-03-24','YYYY-MM-DD'),3, 3);
 INSERT INTO byl_predepsan (cas_podavani , mnozstvi , davkovanie, datum_zahajenia, datum_ukoncenia , id_hospitalizace , id_lek ) VALUES(CURRENT_TIMESTAMP,1,'1/2 per day',TO_DATE('2018-11-03','YYYY-MM-DD'),TO_DATE('2018-11-23','YYYY-MM-DD'), 2, 4);
 
 INSERT INTO ma_uvazek (typ_uvazku , pozice , telefonni_cislo , id_oddeleni , id_lekar) VALUES('full-time','Cardiologist','462-535-0183', 2, 4);
