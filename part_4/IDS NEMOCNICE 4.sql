@@ -460,7 +460,24 @@ SELECT * FROM OSOBA
 SELECT nazev FROM LEK
 WHERE EXISTS (SELECT id_lek FROM byl_predepsan WHERE id_lek = LEK.id_lek AND mnozstvi = 10);
 
+/* --------------------- INDEX -------------------------- */
 
+DROP INDEX index1;
+    -- Kolik lekare je na kterem oddeleni
+EXPLAIN PLAN FOR 
+SELECT PACIENT.rodne_cislo, COUNT(*) pocet
+      FROM HOSPITALIZACE JOIN Pacient on(Pacient.rodne_cislo=HOSPITALIZACE.rodne_cislo)
+      GROUP BY Pacient.rodne_cislo;
+
+	SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
+    
+CREATE INDEX index1 ON HOSPITALIZACE (rodne_cislo);
+EXPLAIN PLAN FOR 
+SELECT PACIENT.rodne_cislo, COUNT(*) pocet
+      FROM HOSPITALIZACE JOIN Pacient on(Pacient.rodne_cislo=HOSPITALIZACE.rodne_cislo)
+      GROUP BY Pacient.rodne_cislo;
+
+	SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
 
 
 
