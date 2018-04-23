@@ -483,7 +483,26 @@ GRANT ALL ON provedl_lekar_vysetreni TO xvesov00;
 
 COMMIT;
 
+DROP MATERIALIZED VIEW pocetV;
 
+CREATE MATERIALIZED VIEW LOG ON VYSETRENI WITH PRIMARY KEY,ROWID(id_lekar) INCLUDING NEW VALUES;
+
+CREATE MATERIALIZED VIEW pocetV 
+CACHE --postupne optimalizuje citanie z pohladu
+BUILD IMMEDIATE --naplni pohlad hned po jeho vytvoreni
+REFRESH FAST ON COMMIT --postupne optimalizuje citanie z pohladu
+ENABLE QUERY REWRITE --bude pouzivany optimalizatorom
+AS 
+SELECT V.id_lekar, count(V.id_vysetreni) as pocetVysetreni
+FROM VYSETRENI V
+GROUP BY V.id_lekar;
+
+GRANT ALL ON pocetV TO xvesov00;
+
+SELECT * from pocetV;
+INSERT INTO VYSETRENI (id_vysetreni , vysledek , datum, id_hospitalizace , id_oddeleni , id_lekar ) VALUES(5,'healthy',TO_DATE('07/05/2018','MM-DD-YYYY'), 1, 2, 1);
+COMMIT;
+SELECT * from pocetV;
 
 
 
