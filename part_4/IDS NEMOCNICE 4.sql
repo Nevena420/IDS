@@ -2,7 +2,10 @@
 -- AUTHORS   : Vesovic Nevena & Maros Orsak
 -- DATE_START: 17.4.2018
 -- DATE_END  : **.*.2018
-                                                --- Normal entities ---
+            
+            
+             
+                                           --- Normal entities ---
 
 DROP TABLE OSOBA CASCADE CONSTRAINTS;
 DROP TABLE LEKAR CASCADE CONSTRAINTS;
