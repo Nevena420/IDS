@@ -136,7 +136,6 @@ SET SERVEROUTPUT ON
 
 CREATE SEQUENCE counterID 
     START WITH 1 INCREMENT BY 1 CACHE 20;
-ALTER SESSION SET PLSCOPE_SETTINGS = 'IDENTIFIERS:NONE';
 CREATE OR REPLACE TRIGGER incrementingID
   BEFORE INSERT ON OSOBA
   FOR EACH ROW
@@ -144,11 +143,11 @@ BEGIN
   :new.id_osoba := counterID.nextval; --dame do idcka hodnotu z sequencie +1
 END incrementingID;
 /
-ALTER SESSION SET PLSCOPE_SETTINGS = 'IDENTIFIERS:ALL';
 
 
 
-ALTER SESSION SET PLSCOPE_SETTINGS = 'IDENTIFIERS:NONE';
+
+
 CREATE OR REPLACE TRIGGER checkBirthNumber
 	BEFORE INSERT OR UPDATE OF rodne_cislo ON PACIENT
 	FOR EACH ROW
@@ -192,57 +191,6 @@ CREATE OR REPLACE TRIGGER checkBirthNumber
 --    END IF;
 END checkBirthNumber;
 /
-ALTER SESSION SET PLSCOPE_SETTINGS = 'IDENTIFIERS:ALL';
-
-
-
-/* NASE VYTVORENE PRE RODNE CISLO */
-
---ALTER SESSION SET PLSCOPE_SETTINGS = 'IDENTIFIERS:NONE';
---CREATE OR REPLACE TRIGGER checkBirthNumber 
---    BEFORE INSERT OR UPDATE OF rodne_cislo ON PACIENT
---    FOR EACH ROW
---    DECLARE 
---        rodneCislo PACIENT.rodne_cislo%TYPE;       -- birthNumber will have same datatype as PACIENT.rodne_cislo ))
---        rok NUMBER(2);
---        mesic NUMBER(2);
---        den NUMBER(2);
---        sucet NUMBER;
---        lomitko VARCHAR2(1);
---        poradi VARCHAR(4);
---        kontrolnaCislica NUMBER(1);
---        
---    BEGIN
---        rodneCislo := :NEW.rodne_cislo;
---        rok := SUBSTR(rodneCislo ,1 , 2);
---        mesic := SUBSTR(rodneCislo, 3, 2);
---        den := SUBSTR(rodneCislo, 5, 2);
---        lomitko := SUBSTR(rodneCislo, 7, 1);
---        poradi := SUBSTR(rodneCislo, 8, 3);
---        konstrolnaCislica := SUBSTR(rodneCislo, 9, 1);
---        sucet := (rok + mesic + den + poradi); 
---        
---    IF MOD(sucet, 11) != 0 THEN 
---        Raise_Application_Error(-20322, 'Birth number has wrong format');
---    END IF;
---    IF (LENGTH(rodneCislo) != 11) THEN
---        Raise_Application_Error(-20323, 'Birth number has wrong length');
---    END IF;
---    IF (lomitko != '/') THEN
---        Raise_Application_Error(-20324, 'Dash is not in the current Birth number');
---    END IF;
---    IF NOT (rok > -1 and rok < 100 and mesic > 0 and mesic < 13 and den > 1 and den < 32 and poradi > 0 and poradi < 1000 and kontrolnaCislica > 1 and konstrolnaCislica < 10) THEN
---        Raise_Application_Error(-20325, 'Not valid Birth number');
---    END IF;
---END checkBirthNumber;
---/
---ALTER SESSION SET PLSCOPE_SETTINGS = 'IDENTIFIERS:ALL';
-    
-         
-        
-        
-        
-
 
                                         --- CREATING PRIMARY KEYS ---
             
@@ -349,24 +297,85 @@ INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(1, 4);
 INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(4, 2);
 INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(2, 1); 
 
-CREATE OR REPLACE PROCEDURE vyhledej_pacienta (jmeno LEK.nazev%TYPE)
+-- tento vypis funguje
+--SET SERVEROUTPUT ON
+--BEGIN
+-- dbms_output.put_line('This is my first program');
+--END;
+--/
+
+-- first procedure 
+SET SERVEROUTPUT ON
+
+CREATE OR REPLACE PROCEDURE vypis_perceto_zastupenie_lekar_v_databaze
 IS
-    
-    CURSOR akce
-    IS
-        SELECT rodne_cislo,jmeno,nazev FROM 
-        PACIENT NATURAL JOIN HOSPITALIZACE NATURAL JOIN byl_predepsan NATURAL JOIN OSOBA NATURAL JOIN LEK;
+    CURSOR cursor_osoba IS SELECT * FROM OSOBA LEFT JOIN LEKAR ON OSOBA.ID_OSOBA = LEKAR.ID_OSOBA;
+    riadok_tabulky cursor_osoba%ROWTYPE;
+    pocet_osob NUMBER;
+    pocet_lekarov NUMBER;
+    BEGIN
+        -- FIXME: this print does not work..
+        dbms_output.put_line('sem som sa dostal');
+        pocet_osob := 0;
+        pocet_lekarov := 0;
+        OPEN
+            cursor_osoba;
+            LOOP
+                FETCH
+                cursor_osoba INTO riadok_tabulky;
+                EXIT WHEN cursor_osoba%NOTFOUND;
+                IF(riadok_tabulky.id_lekar IS NOT NULL) THEN
+                    pocet_lekarov := pocet_lekarov + 1;
+                END IF; 
+                pocet_osob := pocet_osob + 1;
+            END LOOP;
+        CLOSE cursor_osoba;
+        -- FIXME: this print does not work..
+        dbms_output.put_line('Percetage division persons to doctors is' || pocet_lekarov * 100 / pocet_osob);
+        EXCEPTION
+        WHEN ZERO_DIVIDE THEN
+            -- FIXME: this print does not work..
+            dbms_output.put_line('Error -> Zero division');
+END;
+/
 
-BEGIN
-    SELECT nazev INTO jmeno FROM LEK WHERE jmeno == nazev;  -- chceme vypisat jeden konkretny nazev leku ktory sme dostali ako parameter
-    IF(jmeno == NULL) THEN 
-        DBMS_OUTPUT.put_line('Error: The concrete medicine does not exist in database');
+-- second procedure
+SET SERVEROUTPUT ON
 
-END vyhledej_pacienta;
+CREATE OR REPLACE PROCEDURE vypis_perceto_zastupenie_sestricka_v_databaze
+IS
+    CURSOR cursor_osoba IS SELECT * FROM OSOBA LEFT JOIN SESTRA ON OSOBA.ID_OSOBA = SESTRA.ID_OSOBA;
+    riadok_tabulky cursor_osoba%ROWTYPE;
+    pocet_osob NUMBER;
+    pocet_sestier NUMBER;
+    BEGIN
+        -- FIXME: this print does not work..
+        dbms_output.put_line('sem som sa dostal');
+        pocet_osob := 0;
+        pocet_sestier := 0;
+        OPEN
+            cursor_osoba;
+            LOOP
+                FETCH
+                cursor_osoba INTO riadok_tabulky;
+                EXIT WHEN cursor_osoba%NOTFOUND;
+                IF(riadok_tabulky.id_sestra IS NOT NULL) THEN
+                    pocet_sestier := pocet_sestier + 1;
+                END IF; 
+                pocet_osob := pocet_osob + 1;
+            END LOOP;
+        CLOSE cursor_osoba;
+        -- FIXME: this print does not work..
+        dbms_output.put_line('Percetage division persons to doctors is' || pocet_sestier * 100 / pocet_osob);
+        EXCEPTION
+        WHEN ZERO_DIVIDE THEN
+        -- FIXME: this print does not work..
+            dbms_output.put_line('Error -> Zero division');
+END;
+/
 
 
-
-
+--SELECT LEKAR.id_lekar FROM OSOBA LEFT JOIN LEKAR ON OSOBA.id_osoba = LEKAR.id_osoba;
 
 
 
@@ -374,12 +383,12 @@ END vyhledej_pacienta;
                                                                   --- SELECT QUERIES ---
                                                                   
                                                                 
--- 2x  spojenie dvoch tabuliek
---vypise Sestricku ktorej prijmeni je Flavour ----> cize ID_SESTRA = 2 && ID_ODDELENI = 2 && ID_OSOBA = 10
-
+---- 2x  spojenie dvoch tabuliek
+----vypise Sestricku ktorej prijmeni je Flavour ----> cize ID_SESTRA = 2 && ID_ODDELENI = 2 && ID_OSOBA = 10
+--
 SELECT * FROM SESTRA WHERE id_osoba=(SELECT id_osoba FROM OSOBA WHERE prijmeni='Flavour');
 
---vypise vsetko z Oddelenia na ktorom sa nachadza sestricka, ktora ma ID 3
+----vypise vsetko z Oddelenia na ktorom sa nachadza sestricka, ktora ma ID 3
 
 SELECT * FROM ODDELENI WHERE id_oddeleni=(SELECT id_oddeleni FROM SESTRA WHERE id_sestra='3');
 
@@ -455,8 +464,8 @@ SELECT * FROM OSOBA
     (SELECT id_osoba FROM SESTRA
     WHERE id_oddeleni IN
     (SELECT id_oddeleni FROM ODDELENI WHERE nazev = 'Hematology'));
-    
---Vypise nazev leku ci mnozstvi bylo predepsano na 10 tablety pri hospitalizace.(SELECT s prediktem EXISTS) ----
+--    
+----Vypise nazev leku ci mnozstvi bylo predepsano na 10 tablety pri hospitalizace.(SELECT s prediktem EXISTS) ----
 SELECT nazev FROM LEK
 WHERE EXISTS (SELECT id_lek FROM byl_predepsan WHERE id_lek = LEK.id_lek AND mnozstvi = 10);
 
@@ -469,7 +478,7 @@ SELECT PACIENT.rodne_cislo, COUNT(*) pocet
       FROM HOSPITALIZACE JOIN Pacient on(Pacient.rodne_cislo=HOSPITALIZACE.rodne_cislo)
       GROUP BY Pacient.rodne_cislo;
 
-	SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());
+	SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY());  
     
 CREATE INDEX index1 ON HOSPITALIZACE (rodne_cislo);
 EXPLAIN PLAN FOR 
