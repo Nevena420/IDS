@@ -133,67 +133,67 @@ CREATE TABLE provedl_lekar_vysetreni
 );
 
                             ---- TRIGGERS ----
-SET SERVEROUTPUT ON
+--SET SERVEROUTPUT ON
                      
 --DROP SEQUENCE counterID;
-
-CREATE SEQUENCE counterID 
-    START WITH 1 INCREMENT BY 1 CACHE 20;
-CREATE OR REPLACE TRIGGER incrementingID
-  BEFORE INSERT ON OSOBA
-  FOR EACH ROW
-BEGIN
-  :new.id_osoba := counterID.nextval; --dame do idcka hodnotu z sequencie +1
-END incrementingID;
-/
-
-
+--
+--CREATE SEQUENCE counterID 
+--    START WITH 1 INCREMENT BY 1 CACHE 20;
+--CREATE OR REPLACE TRIGGER incrementingID
+--  BEFORE INSERT ON OSOBA
+--  FOR EACH ROW
+--BEGIN
+--  :new.id_osoba := counterID.nextval; --dame do idcka hodnotu z sequencie +1
+--END incrementingID;
+--/
 
 
 
-CREATE OR REPLACE TRIGGER checkBirthNumber
-	BEFORE INSERT OR UPDATE OF rodne_cislo ON PACIENT
-	FOR EACH ROW
-	DECLARE
-		rodneCislo PACIENT.rodne_cislo%TYPE;
-		lomitko VARCHAR2(1);
-		poradie NUMBER(4);
-		sucet NUMBER;
-		rok NUMBER(2);
-		mesiac NUMBER(2);
-		den NUMBER(2);
-		
-	BEGIN
-		rodneCislo := :NEW.rodne_cislo;
-		lomitko := SUBSTR(rodneCislo, 7, 1);
-		poradie := SUBSTR(rodneCislo, 8, 4);-- kolky je to novorodenec v danom dni
-		sucet := (rok + mesiac + den + poradie); -- sucet musi byt delitelny 11
-		rok := SUBSTR(rodneCislo, 1, 2);	-- ziskanie roku z rodneho cisla
-		mesiac := SUBSTR(rodneCislo, 3, 2);	-- ziskanie mesiaca
-		den := SUBSTR(rodneCislo, 5, 2);	-- ziskanie dna
-	IF MOD(sucet, 11) != 0 THEN 
-        Raise_Application_Error(-20322, 'Birth number has wrong format');
-    END IF;
-    IF (LENGTH(rodneCislo) != 11) THEN
-        Raise_Application_Error(-20323, 'Birth number has wrong length');
-    END IF;
-    IF (lomitko != '/') THEN
-        Raise_Application_Error(-20324, 'Dash is not in the current Birth number');
-    END IF;
-    IF NOT (rok > -1 and rok < 100) THEN
-        Raise_Application_Error(-20325, 'Not valid year number');
-    END IF;
-   IF mesiac < 1 OR (mesiac > 12 AND mesiac < 51) OR mesiac > 62 THEN
-		Raise_Application_Error(-20101, 'Rodne cislo ma chybne uvedeni mesiac');
-	END IF;
-    IF NOT (den > 0 and den < 32) THEN
-        Raise_Application_Error(-20327, 'Not valid day number');
-    END IF;
---    IF NOT (poradi > 0 and poradi < 1000) THEN
---        Raise_Application_Error(-20328, 'Not valid order number');
+
+--
+--CREATE OR REPLACE TRIGGER checkBirthNumber
+--	BEFORE INSERT OR UPDATE OF rodne_cislo ON PACIENT
+--	FOR EACH ROW
+--	DECLARE
+--		rodneCislo PACIENT.rodne_cislo%TYPE;
+--		lomitko VARCHAR2(1);
+--		poradie NUMBER(4);
+--		sucet NUMBER;
+--		rok NUMBER(2);
+--		mesiac NUMBER(2);
+--		den NUMBER(2);
+--		
+--	BEGIN
+--		rodneCislo := :NEW.rodne_cislo;
+--		lomitko := SUBSTR(rodneCislo, 7, 1);
+--		poradie := SUBSTR(rodneCislo, 8, 4);-- kolky je to novorodenec v danom dni
+--		sucet := (rok + mesiac + den + poradie); -- sucet musi byt delitelny 11
+--		rok := SUBSTR(rodneCislo, 1, 2);	-- ziskanie roku z rodneho cisla
+--		mesiac := SUBSTR(rodneCislo, 3, 2);	-- ziskanie mesiaca
+--		den := SUBSTR(rodneCislo, 5, 2);	-- ziskanie dna
+--	IF MOD(sucet, 11) != 0 THEN 
+--        Raise_Application_Error(-20322, 'Birth number has wrong format');
 --    END IF;
-END checkBirthNumber;
-/
+--    IF (LENGTH(rodneCislo) != 11) THEN
+--        Raise_Application_Error(-20323, 'Birth number has wrong length');
+--    END IF;
+--    IF (lomitko != '/') THEN
+--        Raise_Application_Error(-20324, 'Dash is not in the current Birth number');
+--    END IF;
+--    IF NOT (rok > -1 and rok < 100) THEN
+--        Raise_Application_Error(-20325, 'Not valid year number');
+--    END IF;
+--   IF mesiac < 1 OR (mesiac > 12 AND mesiac < 51) OR mesiac > 62 THEN
+--		Raise_Application_Error(-20101, 'Rodne cislo ma chybne uvedeni mesiac');
+--	END IF;
+--    IF NOT (den > 0 and den < 32) THEN
+--        Raise_Application_Error(-20327, 'Not valid day number');
+--    END IF;
+----    IF NOT (poradi > 0 and poradi < 1000) THEN
+----        Raise_Application_Error(-20328, 'Not valid order number');
+----    END IF;
+--END checkBirthNumber;
+--/
 
                                         --- CREATING PRIMARY KEYS ---
             
@@ -245,6 +245,7 @@ INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUE
 INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(10,'Amy','Flavour',TO_DATE('12/12/1912','MM/DD/YYYY'),'Cray Street');
 INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(11,'Lisa','Voubalis',TO_DATE('01/01/1980','MM/DD/YYYY'),'Bay Street');
 INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(12,'Samantha','Wicket',TO_DATE('09/07/1970','MM/DD/YYYY'),'Lane Street');
+INSERT INTO OSOBA (id_osoba , jmeno , prijmeni , datum_narozenin , adresa) VALUES(13,'Leeejla','Wicket',TO_DATE('08/02/1992','MM/DD/YYYY'),'Eane Street');
 
 INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(1,1);
 INSERT INTO LEKAR (id_lekar , id_osoba) VALUES(2,2); 
@@ -261,6 +262,8 @@ INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(1,4,9);
 INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(2,2,10); 
 INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(3,1,11); 
 INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(4,3,12);
+INSERT INTO SESTRA (id_sestra, id_oddeleni , id_osoba) VALUES(5,3,13);
+
 
 INSERT INTO PACIENT (rodne_cislo , telefoni_cislo, id_lekar , id_osoba) VALUES('970110/4270','202-555-0183',3,5);
 INSERT INTO PACIENT (rodne_cislo , telefoni_cislo, id_lekar , id_osoba) VALUES('955615/9701','202-555-0198',2,6); 
@@ -300,12 +303,6 @@ INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(1, 4);
 INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(4, 2);
 INSERT INTO provedl_lekar_vysetreni (id_lekar , id_vysetreni ) VALUES(2, 1); 
 
--- tento vypis funguje
---SET SERVEROUTPUT ON
---BEGIN
--- dbms_output.put_line('This is my first program');
---END;
---/
 
 -- first procedure 
 SET SERVEROUTPUT ON
@@ -317,8 +314,6 @@ IS
     pocet_osob NUMBER;
     pocet_lekarov NUMBER;
     BEGIN
-        -- FIXME: this print does not work..
-        dbms_output.put_line('sem som sa dostal');
         pocet_osob := 0;
         pocet_lekarov := 0;
         OPEN
@@ -333,17 +328,15 @@ IS
                 pocet_osob := pocet_osob + 1;
             END LOOP;
         CLOSE cursor_osoba;
-        -- FIXME: this print does not work..
-        dbms_output.put_line('Percetage division persons to doctors is' || pocet_lekarov * 100 / pocet_osob);
+        dbms_output.put_line('Percetage division persons to doctors is ' || pocet_lekarov * 100 / pocet_osob);
         EXCEPTION
         WHEN ZERO_DIVIDE THEN
-            -- FIXME: this print does not work..
             dbms_output.put_line('Error -> Zero division');
 END;
 /
 
 -- second procedure
-SET SERVEROUTPUT ON
+
 
 CREATE OR REPLACE PROCEDURE vypis_perceto_zastupenie_sestricka_v_databaze
 IS
@@ -352,8 +345,6 @@ IS
     pocet_osob NUMBER;
     pocet_sestier NUMBER;
     BEGIN
-        -- FIXME: this print does not work..
-        dbms_output.put_line('sem som sa dostal');
         pocet_osob := 0;
         pocet_sestier := 0;
         OPEN
@@ -368,11 +359,9 @@ IS
                 pocet_osob := pocet_osob + 1;
             END LOOP;
         CLOSE cursor_osoba;
-        -- FIXME: this print does not work..
-        dbms_output.put_line('Percetage division persons to doctors is' || pocet_sestier * 100 / pocet_osob);
+        dbms_output.put_line('Percetage division persons to nurses is ' || pocet_sestier * 100 / pocet_osob);
         EXCEPTION
         WHEN ZERO_DIVIDE THEN
-        -- FIXME: this print does not work..
             dbms_output.put_line('Error -> Zero division');
 END;
 /
@@ -382,13 +371,12 @@ END;
 
 
 
-
                                                                   --- SELECT QUERIES ---
                                                                   
                                                                 
 ---- 2x  spojenie dvoch tabuliek
-----vypise Sestricku ktorej prijmeni je Flavour ----> cize ID_SESTRA = 2 && ID_ODDELENI = 2 && ID_OSOBA = 10
---
+--vypise Sestricku ktorej prijmeni je Flavour ----> cize ID_SESTRA = 2 && ID_ODDELENI = 2 && ID_OSOBA = 10
+
 SELECT * FROM SESTRA WHERE id_osoba=(SELECT id_osoba FROM OSOBA WHERE prijmeni='Flavour');
 
 ----vypise vsetko z Oddelenia na ktorom sa nachadza sestricka, ktora ma ID 3
@@ -427,6 +415,10 @@ SELECT * FROM ma_uvazek WHERE typ_uvazku='full-time';
 SELECT * FROM OSOBA WHERE id_osoba=(SELECT id_lekar FROM LEKAR WHERE id_lekar=(SELECT id_lekar FROM ma_uvazek WHERE telefonni_cislo= '462-535-0183')); 
 
 
+                            -- CALLING THE PROCEDURES --
+                            
+exec vypis_perceto_zastupenie_lekar_v_databaze;
+exec vypis_perceto_zastupenie_sestricka_v_databaze;
 
 
 
