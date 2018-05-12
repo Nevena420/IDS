@@ -133,67 +133,67 @@ CREATE TABLE provedl_lekar_vysetreni
 );
 
                             ---- TRIGGERS ----
---SET SERVEROUTPUT ON
+SET SERVEROUTPUT ON
                      
---DROP SEQUENCE counterID;
---
---CREATE SEQUENCE counterID 
---    START WITH 1 INCREMENT BY 1 CACHE 20;
---CREATE OR REPLACE TRIGGER incrementingID
---  BEFORE INSERT ON OSOBA
---  FOR EACH ROW
---BEGIN
---  :new.id_osoba := counterID.nextval; --dame do idcka hodnotu z sequencie +1
---END incrementingID;
---/
+DROP SEQUENCE counterID;
+
+CREATE SEQUENCE counterID 
+    START WITH 1 INCREMENT BY 1 CACHE 20;
+CREATE OR REPLACE TRIGGER incrementingID
+  BEFORE INSERT ON OSOBA
+  FOR EACH ROW
+BEGIN
+  :new.id_osoba := counterID.nextval; --dame do idcka hodnotu z sequencie +1
+END incrementingID;
+/
 
 
 
 
---
---CREATE OR REPLACE TRIGGER checkBirthNumber
---	BEFORE INSERT OR UPDATE OF rodne_cislo ON PACIENT
---	FOR EACH ROW
---	DECLARE
---		rodneCislo PACIENT.rodne_cislo%TYPE;
---		lomitko VARCHAR2(1);
---		poradie NUMBER(4);
---		sucet NUMBER;
---		rok NUMBER(2);
---		mesiac NUMBER(2);
---		den NUMBER(2);
---		
---	BEGIN
---		rodneCislo := :NEW.rodne_cislo;
---		lomitko := SUBSTR(rodneCislo, 7, 1);
---		poradie := SUBSTR(rodneCislo, 8, 4);-- kolky je to novorodenec v danom dni
---		sucet := (rok + mesiac + den + poradie); -- sucet musi byt delitelny 11
---		rok := SUBSTR(rodneCislo, 1, 2);	-- ziskanie roku z rodneho cisla
---		mesiac := SUBSTR(rodneCislo, 3, 2);	-- ziskanie mesiaca
---		den := SUBSTR(rodneCislo, 5, 2);	-- ziskanie dna
---	IF MOD(sucet, 11) != 0 THEN 
---        Raise_Application_Error(-20322, 'Birth number has wrong format');
+
+CREATE OR REPLACE TRIGGER checkBirthNumber
+	BEFORE INSERT OR UPDATE OF rodne_cislo ON PACIENT
+	FOR EACH ROW
+	DECLARE
+		rodneCislo PACIENT.rodne_cislo%TYPE;
+		lomitko VARCHAR2(1);
+		poradie NUMBER(4);
+		sucet NUMBER;
+		rok NUMBER(2);
+		mesiac NUMBER(2);
+		den NUMBER(2);
+		
+	BEGIN
+		rodneCislo := :NEW.rodne_cislo;
+		lomitko := SUBSTR(rodneCislo, 7, 1);
+		poradie := SUBSTR(rodneCislo, 8, 4);-- kolky je to novorodenec v danom dni
+		sucet := (rok + mesiac + den + poradie); -- sucet musi byt delitelny 11
+		rok := SUBSTR(rodneCislo, 1, 2);	-- ziskanie roku z rodneho cisla
+		mesiac := SUBSTR(rodneCislo, 3, 2);	-- ziskanie mesiaca
+		den := SUBSTR(rodneCislo, 5, 2);	-- ziskanie dna
+	IF MOD(sucet, 11) != 0 THEN 
+        Raise_Application_Error(-20322, 'Birth number has wrong format');
+    END IF;
+    IF (LENGTH(rodneCislo) != 11) THEN
+        Raise_Application_Error(-20323, 'Birth number has wrong length');
+    END IF;
+    IF (lomitko != '/') THEN
+        Raise_Application_Error(-20324, 'Dash is not in the current Birth number');
+    END IF;
+    IF NOT (rok > -1 and rok < 100) THEN
+        Raise_Application_Error(-20325, 'Not valid year number');
+    END IF;
+   IF (mesiac < 1 OR mesiac > 12) THEN
+		Raise_Application_Error(-20326, 'Not valid month');
+	END IF;
+    IF (den <= 0 and den >= 32) THEN
+        Raise_Application_Error(-20327, 'Not valid day number');
+    END IF;
+--    IF (poradie < 0 OR poradie > 999) THEN
+--        Raise_Application_Error(-20328, 'Not valid order number');
 --    END IF;
---    IF (LENGTH(rodneCislo) != 11) THEN
---        Raise_Application_Error(-20323, 'Birth number has wrong length');
---    END IF;
---    IF (lomitko != '/') THEN
---        Raise_Application_Error(-20324, 'Dash is not in the current Birth number');
---    END IF;
---    IF NOT (rok > -1 and rok < 100) THEN
---        Raise_Application_Error(-20325, 'Not valid year number');
---    END IF;
---   IF mesiac < 1 OR (mesiac > 12 AND mesiac < 51) OR mesiac > 62 THEN
---		Raise_Application_Error(-20101, 'Rodne cislo ma chybne uvedeni mesiac');
---	END IF;
---    IF NOT (den > 0 and den < 32) THEN
---        Raise_Application_Error(-20327, 'Not valid day number');
---    END IF;
-----    IF NOT (poradi > 0 and poradi < 1000) THEN
-----        Raise_Application_Error(-20328, 'Not valid order number');
-----    END IF;
---END checkBirthNumber;
---/
+END checkBirthNumber;
+/
 
                                         --- CREATING PRIMARY KEYS ---
             
